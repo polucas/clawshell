@@ -1,0 +1,27 @@
+# docker-compose.yml - FULL ISOLATION (no network)
+version: '3.8'
+services:
+  openclaw-dev:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.dev
+    container_name: clawshell-dev
+    # CRITICAL: No network access
+    network_mode: none
+    # Mount our ClawShell code into the container
+    volumes:
+      # ClawShell source -> skill directory
+      - ../src:/app/workspace/skills/clawshell/src:ro
+      - ../SKILL.md:/app/workspace/skills/clawshell/SKILL.md:ro
+      - ../config.yaml:/app/workspace/skills/clawshell/config.yaml:ro
+      - ../package.json:/app/workspace/skills/clawshell/package.json:ro
+      # Logs (writable)
+      - ../logs:/app/workspace/skills/clawshell/logs
+      # Test files — mount into skill dir so relative imports (../src/) work
+      - ../test:/app/workspace/skills/clawshell/test:ro
+    # Environment from .env file
+    env_file:
+      - ../.env
+    # Keep container running
+    tty: true
+    stdin_open: true

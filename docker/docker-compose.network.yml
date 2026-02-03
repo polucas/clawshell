@@ -1,0 +1,27 @@
+﻿# docker-compose.network.yml - LIMITED NETWORK (Pushover only)
+version: '3.8'
+services:
+  openclaw-dev:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.dev
+    container_name: clawshell-dev-network
+    # Use restricted network
+    networks:
+      - clawshell-restricted
+    volumes:
+      - ../src:/app/workspace/skills/clawshell/src:ro
+      - ../SKILL.md:/app/workspace/skills/clawshell/SKILL.md:ro
+      - ../config.yaml:/app/workspace/skills/clawshell/config.yaml:ro
+      - ../package.json:/app/workspace/skills/clawshell/package.json:ro
+      - ../logs:/app/workspace/skills/clawshell/logs
+      - ../test:/app/workspace/skills/clawshell/test:ro
+    env_file:
+      - ../.env
+    tty: true
+    stdin_open: true
+networks:
+  clawshell-restricted:
+    driver: bridge
+    # Note: For true domain restriction, you'd need iptables rules
+    # inside the container or a proxy. This at least isolates from host.

@@ -1,0 +1,35 @@
+clawshell:
+  enabled: true
+  timeout_seconds: 300
+  log_level: info  # debug, info, warn, error
+
+# Notification settings (env vars take precedence)
+notifications:
+  method: pushover  # or telegram
+  # Keys should be in .env, not here
+
+rules:
+  blocklist:
+    commands:
+      - "rm -rf /"
+      - "rm -rf ~"
+      - ":(){ :|:& };:"
+      - "mkfs.*"
+      - "/dd\\s+.*of=\\/dev\\//"
+    paths:
+      - "/etc/shadow"
+      - "~/.ssh/id_*"
+      - "~/.aws/credentials"
+      - "~/.openclaw/credentials"
+
+  allowlist:
+    paths:
+      - "/app/workspace/**"
+      - "/tmp/**"
+    commands:
+      - "npm test"
+      - "npm run *"
+      - "pnpm *"
+      - "git status"
+      - "git diff"
+      - "git log"

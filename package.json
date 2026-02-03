@@ -1,0 +1,21 @@
+{
+  "name": "openclaw-clawshell",
+  "version": "0.1.0",
+  "description": "Human-in-the-loop security layer for OpenClaw agents",
+  "type": "module",
+  "main": "src/index.mjs",
+  "exports": {
+    ".": "./src/index.mjs"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "keywords": ["openclaw", "security", "approval", "sandbox"],
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.13.4",
+    "minimatch": "^10.1.1",
+    "uuid": "^13.0.0",
+    "yaml": "^2.8.2"
+  }
+}

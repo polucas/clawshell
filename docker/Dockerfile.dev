@@ -1,0 +1,27 @@
+# Dockerfile.dev - Isolated OpenClaw for ClawShell development
+FROM node:22-slim
+
+RUN apt-get update && apt-get install -y iputils-ping git && rm -rf /var/lib/apt/lists/*
+
+# Install OpenClaw globally
+RUN npm install -g openclaw@latest
+
+# Create workspace structure
+RUN mkdir -p /app/workspace/skills/clawshell /app/logs
+
+# Symlink into OpenClaw's skill discovery path
+RUN mkdir -p /root/.openclaw/workspace/skills && \
+    ln -s /app/workspace/skills/clawshell /root/.openclaw/workspace/skills/clawshell
+
+# Copy package.json and install dependencies during build (has network)
+COPY package.json /app/workspace/skills/clawshell/package.json
+WORKDIR /app/workspace/skills/clawshell
+RUN npm install
+
+WORKDIR /app
+
+# Set workspace
+ENV WORKSPACE_DIR=/app/workspace
+
+# Don't auto-start gateway - we control when it runs
+CMD ["sleep", "infinity"]
